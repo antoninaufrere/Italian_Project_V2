@@ -1,0 +1,631 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="vineyard_world">
+
+    <physics name="default_physics" default="0" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <gravity>0 0 -9.81</gravity>
+
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.8 1 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Sol avec collision -->
+    <model name="ground">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- RANGÉE 1: y = -1.0 (AVEC feuilles) -->
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_1</name>
+      <pose>0 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_2</name>
+      <pose>1.2 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_3</name>
+      <pose>2.4 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_4</name>
+      <pose>3.6 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_5</name>
+      <pose>4.8 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_6</name>
+      <pose>6.0 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_7</name>
+      <pose>7.2 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_8</name>
+      <pose>8.4 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_9</name>
+      <pose>9.6 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row1_vine_10</name>
+      <pose>10.8 -1.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 2: y = -3.0 (AVEC feuilles) -->
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_1</name>
+      <pose>0 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_2</name>
+      <pose>1.2 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_3</name>
+      <pose>2.4 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_4</name>
+      <pose>3.6 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_5</name>
+      <pose>4.8 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_6</name>
+      <pose>6.0 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_7</name>
+      <pose>7.2 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_8</name>
+      <pose>8.4 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_9</name>
+      <pose>9.6 -3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row2_vine_10</name>
+      <pose>10.8 -3.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 3: y = -5.0 (AVEC feuilles) -->
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_1</name>
+      <pose>0 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_2</name>
+      <pose>1.2 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_3</name>
+      <pose>2.4 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_4</name>
+      <pose>3.6 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_5</name>
+      <pose>4.8 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_6</name>
+      <pose>6.0 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_7</name>
+      <pose>7.2 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_8</name>
+      <pose>8.4 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_9</name>
+      <pose>9.6 -5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row3_vine_10</name>
+      <pose>10.8 -5.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 4: y = -7.0 (AVEC feuilles) -->
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_1</name>
+      <pose>0 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_2</name>
+      <pose>1.2 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_3</name>
+      <pose>2.4 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_4</name>
+      <pose>3.6 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_5</name>
+      <pose>4.8 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_6</name>
+      <pose>6.0 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_7</name>
+      <pose>7.2 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_8</name>
+      <pose>8.4 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_9</name>
+      <pose>9.6 -7.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row4_vine_10</name>
+      <pose>10.8 -7.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 5: y = -9.0 (AVEC feuilles) -->
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_1</name>
+      <pose>0 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_2</name>
+      <pose>1.2 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_3</name>
+      <pose>2.4 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_4</name>
+      <pose>3.6 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_5</name>
+      <pose>4.8 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_6</name>
+      <pose>6.0 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_7</name>
+      <pose>7.2 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_8</name>
+      <pose>8.4 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_9</name>
+      <pose>9.6 -9.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row5_vine_10</name>
+      <pose>10.8 -9.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 6: y = -11.0 (AVEC feuilles) -->
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_1</name>
+      <pose>0 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_2</name>
+      <pose>1.2 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_3</name>
+      <pose>2.4 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_4</name>
+      <pose>3.6 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_5</name>
+      <pose>4.8 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_6</name>
+      <pose>6.0 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_7</name>
+      <pose>7.2 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_8</name>
+      <pose>8.4 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_9</name>
+      <pose>9.6 -11.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_with_leaves</uri>
+      <name>row6_vine_10</name>
+      <pose>10.8 -11.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 7: y = -13.0 (SANS feuilles) -->
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_1</name>
+      <pose>0 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_2</name>
+      <pose>1.2 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_3</name>
+      <pose>2.4 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_4</name>
+      <pose>3.6 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_5</name>
+      <pose>4.8 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_6</name>
+      <pose>6.0 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_7</name>
+      <pose>7.2 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_8</name>
+      <pose>8.4 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_9</name>
+      <pose>9.6 -13.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row7_vine_10</name>
+      <pose>10.8 -13.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 8: y = -15.0 (SANS feuilles) -->
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_1</name>
+      <pose>0 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_2</name>
+      <pose>1.2 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_3</name>
+      <pose>2.4 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_4</name>
+      <pose>3.6 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_5</name>
+      <pose>4.8 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_6</name>
+      <pose>6.0 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_7</name>
+      <pose>7.2 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_8</name>
+      <pose>8.4 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_9</name>
+      <pose>9.6 -15.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row8_vine_10</name>
+      <pose>10.8 -15.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 9: y = -17.0 (SANS feuilles) -->
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_1</name>
+      <pose>0 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_2</name>
+      <pose>1.2 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_3</name>
+      <pose>2.4 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_4</name>
+      <pose>3.6 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_5</name>
+      <pose>4.8 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_6</name>
+      <pose>6.0 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_7</name>
+      <pose>7.2 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_8</name>
+      <pose>8.4 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_9</name>
+      <pose>9.6 -17.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row9_vine_10</name>
+      <pose>10.8 -17.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 10: y = -19.0 (SANS feuilles) -->
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_1</name>
+      <pose>0 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_2</name>
+      <pose>1.2 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_3</name>
+      <pose>2.4 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_4</name>
+      <pose>3.6 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_5</name>
+      <pose>4.8 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_6</name>
+      <pose>6.0 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_7</name>
+      <pose>7.2 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_8</name>
+      <pose>8.4 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_9</name>
+      <pose>9.6 -19.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row10_vine_10</name>
+      <pose>10.8 -19.0 0 0 0 0</pose>
+    </include>
+
+    <!-- RANGÉE 11: y = -21.0 (SANS feuilles) -->
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_1</name>
+      <pose>0 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_2</name>
+      <pose>1.2 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_3</name>
+      <pose>2.4 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_4</name>
+      <pose>3.6 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_5</name>
+      <pose>4.8 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_6</name>
+      <pose>6.0 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_7</name>
+      <pose>7.2 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_8</name>
+      <pose>8.4 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_9</name>
+      <pose>9.6 -21.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vine_without_leaves</uri>
+      <name>row11_vine_10</name>
+      <pose>10.8 -21.0 0 0 0 0</pose>
+    </include>
+
+  </world>
+</sdf>

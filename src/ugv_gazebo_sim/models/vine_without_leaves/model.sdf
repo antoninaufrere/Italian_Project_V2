@@ -1,0 +1,221 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="vine_plant_winter">
+    <static>true</static>
+    <link name="link">
+      
+      <!-- TRONC PRINCIPAL (hauteur 2m) -->
+      <collision name="trunk">
+        <pose>0 0 1.0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.03</radius>
+            <length>2.0</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="trunk">
+        <pose>0 0 1.0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.03</radius>
+            <length>2.0</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.35 0.2 0.1 1</ambient>
+          <diffuse>0.35 0.2 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- BRANCHE GAUCHE -->
+      <collision name="branch_left">
+        <pose>-0.15 0 1.8 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.015</radius>
+            <length>0.3</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="branch_left">
+        <pose>-0.15 0 1.8 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.015</radius>
+            <length>0.3</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.4 0.25 0.15 1</ambient>
+          <diffuse>0.4 0.25 0.15 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- BRANCHE DROITE -->
+      <collision name="branch_right">
+        <pose>0.15 0 1.8 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.015</radius>
+            <length>0.3</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="branch_right">
+        <pose>0.15 0 1.8 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.015</radius>
+            <length>0.3</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.4 0.25 0.15 1</ambient>
+          <diffuse>0.4 0.25 0.15 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- SARMENTS SECONDAIRES GAUCHE -->
+      <visual name="twig_left_1">
+        <pose>-0.25 0.03 1.85 0 0.5 0.3</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.12</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.45 0.3 0.2 1</ambient>
+          <diffuse>0.45 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="twig_left_2">
+        <pose>-0.2 -0.05 1.75 0 0.4 -0.4</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.45 0.3 0.2 1</ambient>
+          <diffuse>0.45 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- SARMENTS SECONDAIRES DROITE -->
+      <visual name="twig_right_1">
+        <pose>0.25 -0.03 1.85 0 0.5 -0.3</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.12</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.45 0.3 0.2 1</ambient>
+          <diffuse>0.45 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="twig_right_2">
+        <pose>0.2 0.05 1.75 0 0.4 0.4</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.45 0.3 0.2 1</ambient>
+          <diffuse>0.45 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- SARMENTS MOYENS -->
+      <visual name="twig_mid_left">
+        <pose>-0.1 0.02 1.3 0 0.6 0.2</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.45 0.3 0.2 1</ambient>
+          <diffuse>0.45 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="twig_mid_right">
+        <pose>0.1 -0.02 1.3 0 0.6 -0.2</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.008</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.45 0.3 0.2 1</ambient>
+          <diffuse>0.45 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- BOURGEONS -->
+      <visual name="bud_1">
+        <pose>-0.25 0 1.85 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.012</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0.3 0.15 0.1 1</ambient>
+          <diffuse>0.3 0.15 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="bud_2">
+        <pose>0.25 0 1.85 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.012</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0.3 0.15 0.1 1</ambient>
+          <diffuse>0.3 0.15 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="bud_3">
+        <pose>-0.15 0.05 1.65 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.01</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0.3 0.15 0.1 1</ambient>
+          <diffuse>0.3 0.15 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="bud_4">
+        <pose>0.15 -0.05 1.65 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.01</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0.3 0.15 0.1 1</ambient>
+          <diffuse>0.3 0.15 0.1 1</diffuse>
+        </material>
+      </visual>
+
+    </link>
+  </model>
+</sdf>

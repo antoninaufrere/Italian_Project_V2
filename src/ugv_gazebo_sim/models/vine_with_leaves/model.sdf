@@ -1,0 +1,267 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="vine_plant_with_leaves">
+    <static>true</static>
+    <link name="link">
+      
+      <!-- TRONC PRINCIPAL (hauteur 2m) -->
+      <collision name="trunk">
+        <pose>0 0 1.0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.03</radius>
+            <length>2.0</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="trunk">
+        <pose>0 0 1.0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.03</radius>
+            <length>2.0</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.4 0.25 0.15 1</ambient>
+          <diffuse>0.4 0.25 0.15 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- BRANCHES HORIZONTALES -->
+      <collision name="branch_left">
+        <pose>-0.5 0 1.8 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.015</radius>
+            <length>1.0</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="branch_left">
+        <pose>-0.5 0 1.8 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.015</radius>
+            <length>1.0</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.5 0.3 0.2 1</ambient>
+          <diffuse>0.5 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <collision name="branch_right">
+        <pose>0.5 0 1.8 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.015</radius>
+            <length>1.0</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="branch_right">
+        <pose>0.5 0 1.8 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.015</radius>
+            <length>1.0</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.5 0.3 0.2 1</ambient>
+          <diffuse>0.5 0.3 0.2 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- FEUILLAGE NIVEAU HAUT (1.8m) -->
+      <visual name="leaves_left_top">
+        <pose>-0.6 0 1.8 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.3 0.6 0.4</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.5 0.1 1</ambient>
+          <diffuse>0.1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leaves_right_top">
+        <pose>0.6 0 1.8 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.3 0.6 0.4</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.5 0.1 1</ambient>
+          <diffuse>0.1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leaves_center_top">
+        <pose>0 0 1.8 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.8 0.6 0.4</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.12 0.55 0.12 1</ambient>
+          <diffuse>0.12 0.65 0.12 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- FEUILLAGE NIVEAU MOYEN-HAUT (1.4m) -->
+      <visual name="leaves_left_mid_high">
+        <pose>-0.55 0 1.4 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.28 0.58 0.38</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.5 0.1 1</ambient>
+          <diffuse>0.1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leaves_right_mid_high">
+        <pose>0.55 0 1.4 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.28 0.58 0.38</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.5 0.1 1</ambient>
+          <diffuse>0.1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leaves_center_mid_high">
+        <pose>0 0 1.4 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.7 0.58 0.38</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.12 0.55 0.12 1</ambient>
+          <diffuse>0.12 0.65 0.12 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- FEUILLAGE NIVEAU MOYEN (1.0m) -->
+      <visual name="leaves_left_mid">
+        <pose>-0.5 0 1.0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.26 0.55 0.36</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.5 0.1 1</ambient>
+          <diffuse>0.1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leaves_right_mid">
+        <pose>0.5 0 1.0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.26 0.55 0.36</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.5 0.1 1</ambient>
+          <diffuse>0.1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leaves_center_mid">
+        <pose>0 0 1.0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.65 0.55 0.36</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.12 0.55 0.12 1</ambient>
+          <diffuse>0.12 0.65 0.12 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- FEUILLAGE NIVEAU BAS (0.7m) -->
+      <visual name="leaves_left_low">
+        <pose>-0.45 0 0.7 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.24 0.52 0.34</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.5 0.1 1</ambient>
+          <diffuse>0.1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leaves_right_low">
+        <pose>0.45 0 0.7 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.24 0.52 0.34</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.5 0.1 1</ambient>
+          <diffuse>0.1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="leaves_center_low">
+        <pose>0 0 0.7 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.6 0.52 0.34</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.12 0.55 0.12 1</ambient>
+          <diffuse>0.12 0.65 0.12 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- GRAPPES DE RAISIN -->
+      <visual name="grape_left">
+        <pose>-0.3 0 1.2 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.08</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0.4 0.2 0.5 1</ambient>
+          <diffuse>0.5 0.25 0.6 1</diffuse>
+        </material>
+      </visual>
+
+      <visual name="grape_right">
+        <pose>0.3 0 0.8 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.08</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0.4 0.2 0.5 1</ambient>
+          <diffuse>0.5 0.25 0.6 1</diffuse>
+        </material>
+      </visual>
+
+    </link>
+  </model>
+</sdf>

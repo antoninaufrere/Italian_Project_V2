@@ -1,15 +1,13 @@
-# ROS2 workspace generated folders
 build/
 install/
 log/
 
-# Common junk
 *.pyc
 __pycache__/
 .vscode/
 .idea/
 .DS_Store
 
-# PDFs / graphs if you don't want them tracked (optionnel)
+# optionnel
 *.pdf
 *.gv
