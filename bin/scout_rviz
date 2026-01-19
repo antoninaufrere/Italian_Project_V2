@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -e
+
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+
+RVIZ_CFG="/home/antonin/scout_ws/rviz2_scout_config.rviz"
+
+echo "[scout_rviz] 4) Lancement scout_work (si pas déjà lancé)..."
+
+if pgrep -af "scripts/scout_work.py" >/dev/null; then
+  echo "[scout_rviz] scout_work déjà lancé :"
+  pgrep -af "scripts/scout/scout_work.py"
+else
+  echo "[scout_rviz] scout_work non détecté -> lancement"
+  ~/bin/scout_work >/tmp/scout_work.log 2>&1 &
+  WORK_PID=$!
+  disown || true
+  echo "[scout_rviz] scout_work lancé (pid=$WORK_PID). Logs: /tmp/scout_work.log"
+fi
+
+sleep 2.5
+
+echo "[scout_run] 5) RViz2..."
+if [ -f "$RVIZ_CFG" ]; then
+  rviz2 -d "$RVIZ_CFG"
+else
+  rviz2
+fi

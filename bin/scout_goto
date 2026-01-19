@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -e
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+
+
+python3 ~/scout_ws/scripts/go_to_pose.py --ros-args "$@"

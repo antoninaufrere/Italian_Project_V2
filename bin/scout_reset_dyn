@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+source /opt/ros/humble/setup.bash
+ros2 service call /delete_entity gazebo_msgs/srv/DeleteEntity "{name: 'scout_v2_dyn'}" >/dev/null 2>&1 || true
+exec scout_spawn_dyn
+

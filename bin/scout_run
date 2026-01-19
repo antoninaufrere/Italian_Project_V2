@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -e
+
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+
+echo "[scout_run] 1) Gazebo..."
+if ! pgrep -f "gz sim|gazebo|ign gazebo" >/dev/null; then
+  ~/bin/scout_gz &
+  disown || true
+  sleep 3
+else
+  echo "[scout_run] Gazebo déjà lancé."
+fi
+
+echo "[scout_run] 2) Spawn robot..."
+~/bin/scout_spawn_dyn
+sleep 1
+
+echo "[scout_run] 3) Static TF LiDAR..."
+pkill -f "static_transform_publisher.*base_footprint.*vlp16_link" >/dev/null 2>&1 || true
+ros2 run tf2_ros static_transform_publisher 0 0 0.35 0 0 0 base_footprint vlp16_link \
+  >/tmp/scout_run_tf.log 2>&1 &
+
+TF_PID=$!
+
+cleanup() { kill "$TF_PID" >/dev/null 2>&1 || true; }
+trap cleanup EXIT INT TERM
+
+sleep 0.3
+

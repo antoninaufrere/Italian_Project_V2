@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+set -e
+
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+
+XACRO=~/scout_ws/src/ugv_gazebo_sim/scout/scout_description/urdf/scout_v2.xacro
+
+OUT_URDF=/tmp/scout_v2_dyn.urdf
+OUT_GZ=/tmp/scout_v2_dyn_gazebo.urdf
+
+echo "[scout_spawn_dyn_dd4] 1) Génère URDF depuis xacro..."
+xacro "$XACRO" > "$OUT_URDF"
+
+echo "[scout_spawn_dyn_dd4] 2) Convertit package:// et model:// -> file:// + patch joints/axes + inject diff_drive..."
+python3 - <<'PY'
+from pathlib import Path
+import re
+
+share = Path.home() / "scout_ws/install/scout_description/share/scout_description"
+p_in  = Path("/tmp/scout_v2_dyn.urdf")
+p_out = Path("/tmp/scout_v2_dyn_gazebo.urdf")
+
+txt = p_in.read_text()
+
+# remap meshes
+txt = txt.replace("package://scout_description/", f"file://{share.as_posix()}/")
+txt = txt.replace("model://scout_description/",   f"file://{share.as_posix()}/")
+
+# 1) PATCH: joints roues en continuous (gazebo vire parfois fixed)
+wheel_joints = ["front_left_wheel", "front_right_wheel", "rear_left_wheel", "rear_right_wheel"]
+for j in wheel_joints:
+    txt = re.sub(rf'(<joint\s+name="{j}"\s+type=")fixed(")', r'\1continuous\2', txt)
+
+# 2) PATCH: normalise AXIS des roues (IMPORTANT)
+# On force à 0 1 0 (si inversé après test, on passera à 0 -1 0)
+for j in wheel_joints:
+    txt = re.sub(
+        rf'(<joint\s+name="{j}".*?>.*?<axis[^>]*xyz=")[^"]+(".*?</joint>)',
+        rf'\g<1>0 1 0\2',
+        txt,
+        flags=re.S
+    )
+
+# 3) supprime plugins ros_control / ros2_control / skid_steer (pour éviter erreurs)
+txt = re.sub(r"<gazebo>\s*<plugin[^>]*filename=\"libgazebo_ros_control\.so\".*?</gazebo>\s*", "", txt, flags=re.S)
+txt = re.sub(r"<gazebo>\s*<plugin[^>]*filename=\"libgazebo_ros2_control\.so\".*?</gazebo>\s*", "", txt, flags=re.S)
+txt = re.sub(r"<gazebo>\s*<plugin[^>]*filename=\"libgazebo_ros_skid_steer_drive\.so\".*?</gazebo>\s*", "", txt, flags=re.S)
+
+# 4) supprime planar_move si tu en avais injecté (on revient diff_drive)
+txt = re.sub(r"<gazebo>\s*<plugin[^>]*filename=\"libgazebo_ros_planar_move\.so\".*?</gazebo>\s*", "", txt, flags=re.S)
+
+# 5) injecte deux diff_drive (front + rear) sur le même /cmd_vel
+plugin_block = """
+  <gazebo>
+    <plugin name="scout_diff_drive_front" filename="libgazebo_ros_diff_drive.so">
+      <ros>
+        <namespace>/</namespace>
+        <remapping>cmd_vel:=/cmd_vel</remapping>
+        <remapping>odom:=/odom</remapping>
+      </ros>
+
+      <update_rate>50</update_rate>
+
+      <left_joint>front_left_wheel</left_joint>
+      <right_joint>front_right_wheel</right_joint>
+
+      <wheel_separation>0.583</wheel_separation>
+      <wheel_diameter>0.32918</wheel_diameter>
+
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
+
+      <cmd_vel_timeout>0.25</cmd_vel_timeout>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="scout_diff_drive_rear" filename="libgazebo_ros_diff_drive.so">
+      <ros>
+        <namespace>/</namespace>
+        <remapping>cmd_vel:=/cmd_vel</remapping>
+      </ros>
+
+      <update_rate>50</update_rate>
+
+      <left_joint>rear_left_wheel</left_joint>
+      <right_joint>rear_right_wheel</right_joint>
+
+      <wheel_separation>0.583</wheel_separation>
+      <wheel_diameter>0.32918</wheel_diameter>
+
+      <publish_odom>false</publish_odom>
+      <publish_odom_tf>false</publish_odom_tf>
+
+      <cmd_vel_timeout>0.25</cmd_vel_timeout>
+    </plugin>
+  </gazebo>
+"""
+
+# évite double injection
+if "name=\"scout_diff_drive_front\"" not in txt and "name=\"scout_diff_drive_rear\"" not in txt:
+    txt = txt.replace("</robot>", plugin_block + "\n</robot>")
+
+p_out.write_text(txt)
+print("OK wrote", p_out)
+PY
+
+echo "[scout_spawn_dyn_dd4] 3) Delete ancien modèle (si présent)..."
+ros2 service call /delete_entity gazebo_msgs/srv/DeleteEntity "{name: 'scout_v2_dyn'}" >/dev/null 2>&1 || true
+ros2 service call /delete_entity gazebo_msgs/srv/DeleteEntity "{name: 'scout_v2'}" >/dev/null 2>&1 || true
+
+echo "[scout_spawn_dyn_dd4] 4) Spawn..."
+ros2 run gazebo_ros spawn_entity.py \
+  -entity scout_v2_dyn \
+  -file "$OUT_GZ" \
+  -x 0 -y 0 -z 0.15
+
+echo "[scout_spawn_dyn_dd4] OK"

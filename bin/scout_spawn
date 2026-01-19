@@ -1,0 +1,74 @@
+#!/bin/bash
+set -e
+
+echo " SCOUT 2.0 Spawn (planar_move)....."
+
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+
+URDF_RAW="/tmp/scout_v2.urdf"
+URDF_GZ="/tmp/scout_v2_gazebo.urdf"
+XACRO_SRC="$HOME/scout_ws/src/ugv_gazebo_sim/scout/scout_description/urdf/scout_v2.xacro"
+SHARE_DIR="$HOME/scout_ws/install/scout_description/share/scout_description"
+
+echo "[1/4] xacro -> URDF"
+xacro "$XACRO_SRC" > "$URDF_RAW"
+
+echo "[2/4] Fix meshes (file://) + remove ROS1 plugin + add planar_move"
+python3 - <<PY
+from pathlib import Path
+import re
+
+p_in  = Path("$URDF_RAW")
+p_out = Path("$URDF_GZ")
+share = Path("$SHARE_DIR")
+
+txt = p_in.read_text()
+
+# A) Fix meshes
+txt = txt.replace("package://scout_description/", f"file://{share.as_posix()}/")
+txt = txt.replace("model://scout_description/",   f"file://{share.as_posix()}/")
+
+# B) Remove gazebo_ros_control plugin (ROS1 legacy) if present
+txt = re.sub(
+    r"<gazebo>\\s*<plugin[^>]*filename=\\"libgazebo_ros_control\\.so\\"[\\s\\S]*?</plugin>\\s*</gazebo>",
+    "",
+    txt
+)
+
+# C) Remove any commented planar_move blocks (optional cleanup)
+txt = re.sub(
+    r"<!--\\s*<gazebo>\\s*<plugin[^>]*filename=\\"libgazebo_ros_planar_move\\.so\\"[\\s\\S]*?</gazebo>\\s*-->",
+    "",
+    txt
+)
+
+# D) Inject a NON-commented planar_move plugin before </robot>
+planar = """
+  <gazebo>
+    <plugin name="scout_planar_move" filename="libgazebo_ros_planar_move.so">
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometryRate>20.0</odometryRate>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+    </plugin>
+  </gazebo>
+"""
+
+txt = txt.replace("</robot>", planar + "\n</robot>")
+
+p_out.write_text(txt)
+print("Wrote:", p_out)
+PY
+
+echo "[3/4] Delete old entity (if any)"
+ros2 service call /delete_entity gazebo_msgs/srv/DeleteEntity "{name: 'scout_v2'}" >/dev/null 2>&1 || true
+
+echo "[4/4] Spawn"
+ros2 run gazebo_ros spawn_entity.py \
+  -entity scout_v2 \
+  -file "$URDF_GZ" \
+  -x 0 -y 0 -z 0.15
+
+echo "Spawn done"

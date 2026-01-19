@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+echo "Gazebo World is loading ..."
+# Environnement ROS
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+#évite le téléchargement (donc libcurl timeout....)
+export GAZEBO_MODEL_DATABASE_URI=""
+export GAZEBO_MODEL_PATH=$HOME/scout_ws/src/ugv_gazebo_sim/models:$GAZEBO_MODEL_PATH:/usr/share/gazebo-11/models
+WORLD="$HOME/scout_ws/src/ugv_gazebo_sim/worlds/vineyard.world"
+echo "World: $WORLD"
+echo "Launch Gazebo..."
+gazebo --verbose \
+  "$WORLD" \
+  -s libgazebo_ros_init.so \
+  -s libgazebo_ros_factory.so
+echo "Gazebo is Ready"

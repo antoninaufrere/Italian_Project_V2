@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+
+echo "[scout_job] 1) go_to_pose..."
+python3 ~/scout_ws/scripts/go_to_pose.py --ros-args "$@"
+
+echo "[scout_job] 2) scout_work (row follow)..."
+python3 ~/scout_ws/scripts/scout_work.py --ros-args

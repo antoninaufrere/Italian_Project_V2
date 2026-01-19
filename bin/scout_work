@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+cd ~/scout_ws/scripts
+python3 -m scout.scout_work --ros-args "$@"

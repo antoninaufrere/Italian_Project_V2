@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+set -e
+
+source /opt/ros/humble/setup.bash
+source ~/scout_ws/install/setup.bash
+
+XACRO=~/scout_ws/src/ugv_gazebo_sim/scout/scout_description/urdf/scout_v2.xacro
+
+OUT_URDF=/tmp/scout_v2_dyn.urdf
+OUT_GZ=/tmp/scout_v2_dyn_gazebo.urdf
+
+echo "[scout_spawn_dyn] 1) Génère URDF depuis xacro..."
+xacro "$XACRO" > "$OUT_URDF"
+
+echo "[scout_spawn_dyn] 2) Patch URDF -> Gazebo (file:// + plugins + VLP16)..."
+python3 - <<'PY'
+from pathlib import Path
+import re
+
+share = Path.home() / "scout_ws/install/scout_description/share/scout_description"
+p_in  = Path("/tmp/scout_v2_dyn.urdf")
+p_out = Path("/tmp/scout_v2_dyn_gazebo.urdf")
+
+txt = p_in.read_text()
+
+# 1) URIs mesh: package:// + model:// -> file://
+txt = txt.replace("package://scout_description/", f"file://{share.as_posix()}/")
+txt = txt.replace("model://scout_description/",   f"file://{share.as_posix()}/")
+
+# 2) PATCH joints: fixed -> continuous (sinon Gazebo les supprime)
+for j in ["front_left_wheel", "front_right_wheel", "rear_left_wheel", "rear_right_wheel"]:
+    txt = re.sub(
+        rf'(<joint\s+name="{j}"\s+type=")fixed(")',
+        r'\1continuous\2',
+        txt
+    )
+
+# 2bis) PATCH AXIS : inverser l'axe des roues droites (sinon avance <-> tourne)
+def flip_right_wheel_axis(txt, joint_name):
+    pattern = rf'(<joint\s+name="{joint_name}"[\s\S]*?<axis[^>]*xyz=")([^"]+)(")'
+    m = re.search(pattern, txt)
+    if not m:
+        return txt
+    xyz = m.group(2).strip().split()
+    if len(xyz) == 3:
+        try:
+            y = float(xyz[1])
+            xyz[1] = str(-y)
+        except:
+            pass
+    repl = m.group(1) + " ".join(xyz) + m.group(3)
+    return re.sub(pattern, repl, txt, count=1)
+
+txt = flip_right_wheel_axis(txt, "front_right_wheel")
+txt = flip_right_wheel_axis(txt, "rear_right_wheel")
+
+# 3) SUPPRIMER plugins qui cassent tout / conflit
+txt = re.sub(r"<gazebo>\s*<plugin[^>]*filename=\"libgazebo_ros_control\.so\".*?</plugin>\s*</gazebo>\s*", "", txt, flags=re.S)
+txt = re.sub(r"<gazebo>\s*<plugin[^>]*filename=\"libgazebo_ros2_control\.so\".*?</plugin>\s*</gazebo>\s*", "", txt, flags=re.S)
+txt = re.sub(r"<gazebo>\s*<plugin[^>]*filename=\"libgazebo_ros_skid_steer_drive\.so\".*?</plugin>\s*</gazebo>\s*", "", txt, flags=re.S)
+txt = re.sub(r"<gazebo>\s*<plugin[^>]*filename=\"libgazebo_ros_planar_move\.so\".*?</plugin>\s*</gazebo>\s*", "", txt, flags=re.S)
+
+# 4) Injecter plugins existants (planar + joint_state_pub) + VLP16
+plugin_block = r"""
+  <gazebo>
+    <plugin name="scout_planar" filename="libgazebo_ros_planar_move.so">
+      <ros>
+        <namespace>/</namespace>
+        <remapping>cmd_vel:=/cmd_vel</remapping>
+        <remapping>odom:=/odom</remapping>
+      </ros>
+
+      <commandTopic>/cmd_vel</commandTopic>
+      <odometryTopic>/odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <odometryRate>50.0</odometryRate>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="joint_state_pub" filename="libgazebo_ros_joint_state_publisher.so">
+      <ros>
+        <namespace>/</namespace>
+        <remapping>joint_states:=/joint_states</remapping>
+      </ros>
+
+      <update_rate>50</update_rate>
+      <joint_name>front_left_wheel</joint_name>
+      <joint_name>front_right_wheel</joint_name>
+      <joint_name>rear_left_wheel</joint_name>
+      <joint_name>rear_right_wheel</joint_name>
+    </plugin>
+  </gazebo>
+
+  <!-- ===================== -->
+  <!-- VLP-16 (3D LiDAR)      -->
+  <!-- Pose: base_link -> vlp16_link via joint fixe -->
+  <!-- Publie PointCloud2 sur /vlp16/points -->
+  <!-- ===================== -->
+
+  <link name="vlp16_link">
+    <inertial>
+      <mass value="0.83"/>
+      <inertia ixx="1e-4" ixy="0" ixz="0" iyy="1e-4" iyz="0" izz="1e-4"/>
+    </inertial>
+  </link>
+
+  <joint name="vlp16_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="vlp16_link"/>
+    <!-- Ajuste ici la pose exacte du capteur -->
+    <origin xyz="0.20 0.0 0.35" rpy="0 0 0"/>
+  </joint>
+
+  <gazebo reference="vlp16_link">
+    <sensor name="vlp16" type="gpu_ray">
+      <pose>0 0 0 0 0 0</pose>
+      <update_rate>10</update_rate>
+
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>1800</samples>
+            <min_angle>-3.14159</min_angle>
+            <max_angle> 3.14159</max_angle>
+          </horizontal>
+
+          <vertical>
+            <samples>16</samples>
+            <!-- VLP-16: ~ +15° à -15° -->
+            <min_angle>-0.261799</min_angle>
+            <max_angle> 0.261799</max_angle>
+          </vertical>
+        </scan>
+
+        <range>
+          <min>0.3</min>
+          <max>100.0</max>
+          <resolution>0.01</resolution>
+        </range>
+
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+
+      <plugin name="vlp16_ros" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <namespace>/</namespace>
+          <remapping>~/out:=/vlp16/points</remapping>
+        </ros>
+        <frame_name>vlp16_link</frame_name>
+        <!-- si nécessaire selon version:
+        <output_type>sensor_msgs/PointCloud2</output_type>
+        -->
+      </plugin>
+    </sensor>
+  </gazebo>
+"""
+
+# Injecte juste avant </robot> si pas déjà présent
+if 'name="vlp16_link"' not in txt:
+    txt = txt.replace("</robot>", plugin_block + "\n</robot>")
+
+p_out.write_text(txt)
+print("OK wrote", p_out)
+
+# Mini debug: lister plugins présents
+plugins = re.findall(r'filename="(libgazebo_ros_[^"]+\.so)"', txt)
+print("Plugins in URDF:", sorted(set(plugins)))
+PY
+
+echo "[scout_spawn_dyn] 3) Delete ancien modèle (si présent)..."
+ros2 service call /delete_entity gazebo_msgs/srv/DeleteEntity "{name: 'scout_v2_dyn'}" >/dev/null 2>&1 || true
+ros2 service call /delete_entity gazebo_msgs/srv/DeleteEntity "{name: 'scout_v2'}" >/dev/null 2>&1 || true
+
+echo "[scout_spawn_dyn] 4) Spawn..."
+ros2 run gazebo_ros spawn_entity.py \
+  -entity scout_v2_dyn \
+  -file "$OUT_GZ" \
+  -x -1 -y -2 -z 1
+
+echo "[scout_spawn_dyn] OK"
