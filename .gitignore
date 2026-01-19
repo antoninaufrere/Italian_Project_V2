@@ -1,13 +1,15 @@
-build/
-install/
-log/
+# ROS2 generated folders (anywhere)
+**/build/
+**/install/
+**/log/
 
+# Optional generated artifacts
+*.pdf
+*.gv
+
+# Editor / python junk
 *.pyc
 __pycache__/
 .vscode/
 .idea/
 .DS_Store
-
-# optionnel
-*.pdf
-*.gv
